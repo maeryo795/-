@@ -880,6 +880,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 </div>
  
 <!-- ─── Trust Footer ─── -->
+<div style="text-align:center;padding:8px;font-size:11px;color:#9ca3af;" id="dataBadge">📋 DEMOデータ表示中</div>
 <div class="trust-footer">
   <div class="trust-footer-inner">
     <div class="trust-item">
@@ -1009,12 +1010,19 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
  
 <script>
 /* ═══════════════════════════════════════════════════
-   ★★★ 案件データ ★★★
+   ★★★ 設定エリア ★★★
+   GASのURLをここに貼り付けるだけで、
+   スプレッドシートと連動します。
+═══════════════════════════════════════════════════ */
+const EVENTS_API_URL = 'https://script.google.com/macros/s/AKfycby3A2Zchp-FQe-TlLH7s8_gyJzaTDgDqUzyXYg_X9bTzo0UyaVvLhtDXAwRPW4WOuilsg/exec'; // ← GASのデプロイURLをここに貼り付け
+ 
+/* ═══════════════════════════════════════════════════
+   ★★★ DEMOデータ(GAS未接続時に表示) ★★★
    ここを編集すれば案件が追加・変更できます。
    将来GASと連携する場合は、このeventData配列を
    APIから取得したデータに差し替えてください。
 ═══════════════════════════════════════════════════ */
-const eventData = [
+const DEMO_EVENTDATA = [
   {
     id: "evt-001",
     status: "active",
@@ -1156,6 +1164,44 @@ const eventData = [
    状態管理
 ═══════════════════════════════ */
 let currentCategory = 'すべて';
+let eventData = [...DEMO_EVENTDATA]; // 初期値はDEMOデータ
+ 
+/* ═══════════════════════════════
+   スプレッドシートからデータ取得
+═══════════════════════════════ */
+async function loadEventsFromSheets() {
+  if (!EVENTS_API_URL) {
+    updateDataBadge('demo');
+    return;
+  }
+  try {
+    updateDataBadge('loading');
+    const res = await fetch(EVENTS_API_URL);
+    const data = await res.json();
+    if (data.events && Array.isArray(data.events) && data.events.length > 0) {
+      eventData = data.events;
+      updateDataBadge('live', data.events.length);
+      filterAndRender();
+    } else {
+      updateDataBadge('demo');
+    }
+  } catch(err) {
+    console.error('Sheets fetch error:', err);
+    updateDataBadge('error');
+  }
+}
+ 
+function updateDataBadge(state, count) {
+  const badge = document.getElementById('dataBadge');
+  if (!badge) return;
+  const labels = {
+    demo:    '📋 DEMOデータ表示中',
+    loading: '⏳ 読み込み中...',
+    live:    `✅ LIVE・${count}件`,
+    error:   '⚠️ DEMO表示中(接続エラー)',
+  };
+  badge.textContent = labels[state] || '';
+}
  
 /* ═══════════════════════════════
    カテゴリ設定
@@ -1496,7 +1542,8 @@ function formatDate(dateStr) {
 /* ═══════════════════════════════
    初期表示
 ═══════════════════════════════ */
-filterAndRender();
+filterAndRender(); // まずDEMOで描画
+loadEventsFromSheets(); // Sheetsからデータ取得を試みる
 </script>
 </body>
 </html>
