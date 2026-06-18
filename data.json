@@ -1,1 +1,154 @@
-{}
+{
+  "events": [
+    {
+      "id": "evt-001",
+      "title": "人材業界セミナー",
+      "cat": "company",
+      "loc": "渋谷 / オンライン",
+      "format": "ハイブリッド",
+      "date": "2026年6月25日(水) 19:00〜",
+      "time": 90,
+      "reward": 3000,
+      "rate": 2000,
+      "seats": 6,
+      "level": "かんたん",
+      "new": false,
+      "published": true
+    },
+    {
+      "id": "evt-002",
+      "title": "若手社会人交流会",
+      "cat": "networking",
+      "loc": "新宿",
+      "format": "対面",
+      "date": "2026年6月27日(金) 18:30〜",
+      "time": 120,
+      "reward": 4000,
+      "rate": 2000,
+      "seats": 4,
+      "level": "ふつう",
+      "new": true,
+      "published": true
+    },
+    {
+      "id": "evt-003",
+      "title": "面接対策セミナー",
+      "cat": "interview",
+      "loc": "オンライン",
+      "format": "オンライン",
+      "date": "2026年6月28日(土) 14:00〜",
+      "time": 60,
+      "reward": 2000,
+      "rate": 2000,
+      "seats": 9,
+      "level": "かんたん",
+      "new": false,
+      "published": true
+    },
+    {
+      "id": "evt-004",
+      "title": "スタートアップ起業家交流会",
+      "cat": "entrepreneur",
+      "loc": "六本木",
+      "format": "対面",
+      "date": "2026年6月29日(日) 17:00〜",
+      "time": 120,
+      "reward": 5000,
+      "rate": 2500,
+      "seats": 3,
+      "level": "ふつう",
+      "new": true,
+      "published": true
+    },
+    {
+      "id": "evt-005",
+      "title": "コンサル業界セミナー",
+      "cat": "company",
+      "loc": "丸の内 / オンライン",
+      "format": "ハイブリッド",
+      "date": "2026年7月2日(木) 19:30〜",
+      "time": 90,
+      "reward": 3500,
+      "rate": 2333,
+      "seats": 5,
+      "level": "かんたん",
+      "new": false,
+      "published": true
+    },
+    {
+      "id": "evt-006",
+      "title": "フィンテック業界研究",
+      "cat": "industry",
+      "loc": "オンライン",
+      "format": "オンライン",
+      "date": "2026年7月3日(金) 20:00〜",
+      "time": 90,
+      "reward": 3000,
+      "rate": 2000,
+      "seats": 8,
+      "level": "かんたん",
+      "new": false,
+      "published": true
+    }
+  ],
+  "categories": [
+    {
+      "id": "company",
+      "name": "企業説明会",
+      "desc": "企業の事業や働き方を直接聞ける場。",
+      "rewardRange": "2,000〜4,000円",
+      "time": "60〜120分",
+      "level": "かんたん"
+    },
+    {
+      "id": "career",
+      "name": "キャリアセミナー",
+      "desc": "業界知識やスキルを学べるセミナー。",
+      "rewardRange": "2,000〜3,000円",
+      "time": "60〜90分",
+      "level": "かんたん"
+    },
+    {
+      "id": "networking",
+      "name": "社会人交流会",
+      "desc": "多様な業界の社会人と直接話せる場。",
+      "rewardRange": "3,000〜5,000円",
+      "time": "90〜120分",
+      "level": "ふつう"
+    },
+    {
+      "id": "entrepreneur",
+      "name": "起業家交流会",
+      "desc": "スタートアップ・起業家との交流。",
+      "rewardRange": "3,000〜5,000円",
+      "time": "90〜120分",
+      "level": "ふつう"
+    },
+    {
+      "id": "interview",
+      "name": "面接対策イベント",
+      "desc": "実践的な面接トレーニング。",
+      "rewardRange": "2,000〜3,000円",
+      "time": "60分",
+      "level": "かんたん"
+    },
+    {
+      "id": "industry",
+      "name": "業界研究イベント",
+      "desc": "特定業界を深掘りする会。",
+      "rewardRange": "2,000〜4,000円",
+      "time": "60〜120分",
+      "level": "かんたん"
+    }
+  ],
+  "stats": {
+    "students": "8,400+",
+    "studentsLabel": "登録学生",
+    "events": "620+",
+    "eventsLabel": "開催・紹介実績",
+    "satisfaction": "94%",
+    "satisfactionLabel": "平均満足度",
+    "repeat": "47%",
+    "repeatLabel": "リピート参加率"
+  }
+}
