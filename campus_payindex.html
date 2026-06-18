@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Campus Pay - 空き時間を、ちょっと価値ある時間に。</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F5F1E8;
+  --bg-card:#FFFFFF;
+  --bg-dark:#0F0F0F;
+  --bg-soft:#EEEAE0;
+  --line:#06C755;
+  --line-soft:#E6F8EE;
+  --line-dark:#04A346;
+  --text:#0F0F0F;
+  --text-sub:#5A5A5A;
+  --text-mute:#9A9A9A;
+  --border:#E8E2D4;
+  --shadow:0 2px 12px rgba(15,15,15,0.04);
+  --shadow-lg:0 8px 32px rgba(15,15,15,0.08);
+  --radius:18px;
+  --radius-sm:12px;
+  --radius-lg:24px;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:'Noto Sans JP',-apple-system,BlinkMacSystemFont,sans-serif;
+  background:var(--bg);color:var(--text);
+  line-height:1.6;letter-spacing:0.01em;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden;
+}
+a{color:inherit;text-decoration:none;}
+button{font-family:inherit;border:none;cursor:pointer;background:none;}
+
+/* ─── LINE URL (前田さんの実際のURLに差し替え) ─── */
+/* JavaScriptで一括管理 - data-line属性で指定 */
+
+/* ─── Navigation ─── */
+.nav{
+  position:sticky;top:0;z-index:100;
+  background:rgba(245,241,232,0.85);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-bottom:1px solid rgba(232,226,212,0.5);
+}
+.nav-inner{
+  max-width:1200px;margin:0 auto;padding:14px 24px;
+  display:flex;align-items:center;justify-content:space-between;gap:24px;
+}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:17px;cursor:pointer;}
+.logo-mark{
+  width:32px;height:32px;border-radius:9px;background:var(--line);
+  display:flex;align-items:center;justify-content:center;
+  color:#fff;font-size:11px;font-weight:900;letter-spacing:0.05em;
+}
+.nav-menu{display:flex;gap:32px;font-size:14px;font-weight:500;}
+.nav-menu a{color:var(--text-sub);transition:color .2s;cursor:pointer;}
+.nav-menu a:hover,.nav-menu a.active{color:var(--text);}
+.nav-cta{
+  background:var(--line);color:#fff;
+  padding:10px 18px;border-radius:999px;
+  font-size:13px;font-weight:700;
+  display:flex;align-items:center;gap:6px;
+  transition:transform .15s,background .2s;
+}
+.nav-cta:hover{background:var(--line-dark);transform:translateY(-1px);}
+.nav-cta::before{content:"";width:14px;height:14px;background:#fff;mask:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='black' d='M19 5H5a3 3 0 0 0-3 3v8a3 3 0 0 0 3 3h2v3l4-3h8a3 3 0 0 0 3-3V8a3 3 0 0 0-3-3z'/></svg>") center/contain no-repeat;}
+@media(max-width:768px){.nav-menu{display:none;}.nav-inner{padding:12px 16px;}}
+
+/* ─── Page system ─── */
+.page{display:none;animation:fadeIn .35s ease;}
+.page.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+.container{max-width:1200px;margin:0 auto;padding:0 24px;}
+@media(max-width:768px){.container{padding:0 16px;}}
+
+/* ─── Hero ─── */
+.hero{padding:64px 0 96px;}
+.hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;}
+@media(max-width:900px){.hero{padding:40px 0 64px;}.hero-grid{grid-template-columns:1fr;gap:40px;}}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--line-soft);color:var(--line-dark);
+  padding:8px 14px;border-radius:999px;
+  font-size:13px;font-weight:700;margin-bottom:24px;
+}
+.hero-badge::before{
+  content:"";width:14px;height:14px;border-radius:50%;
+  background:var(--line-dark);
+  mask:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='black' d='M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5'/></svg>") center/12px no-repeat;
+}
+.hero h1{font-size:clamp(40px,6vw,72px);font-weight:900;line-height:1.15;letter-spacing:-0.02em;margin-bottom:24px;}
+.hero-sub{font-size:17px;color:var(--text-sub);line-height:1.8;margin-bottom:32px;max-width:520px;}
+.hero-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:32px;}
+.tag{background:var(--bg-card);border:1px solid var(--border);padding:8px 14px;border-radius:999px;font-size:13px;font-weight:600;}
+.hero-ctas{display:flex;flex-wrap:wrap;gap:12px;}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:16px 28px;border-radius:999px;
+  font-size:15px;font-weight:700;
+  transition:transform .15s,background .2s,box-shadow .2s;
+  white-space:nowrap;
+}
+.btn-line{background:var(--line);color:#fff;box-shadow:0 4px 16px rgba(6,199,85,0.25);}
+.btn-line:hover{background:var(--line-dark);transform:translateY(-2px);box-shadow:0 6px 20px rgba(6,199,85,0.35);}
+.btn-line::before{
+  content:"";width:18px;height:18px;background:#fff;
+  mask:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='black' d='M19 5H5a3 3 0 0 0-3 3v8a3 3 0 0 0 3 3h2v3l4-3h8a3 3 0 0 0 3-3V8a3 3 0 0 0-3-3z'/></svg>") center/contain no-repeat;
+}
+.btn-ghost{background:var(--bg-card);color:var(--text);border:1px solid var(--border);}
+.btn-ghost:hover{background:var(--bg-soft);transform:translateY(-1px);}
+
+/* ─── Hero preview card ─── */
+.hero-card{background:var(--bg-card);border-radius:var(--radius-lg);padding:28px;box-shadow:var(--shadow-lg);position:relative;}
+.hero-card-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;}
+.hero-card-head h3{font-size:16px;font-weight:700;}
+.live-pill{display:inline-flex;align-items:center;gap:6px;background:var(--line-soft);color:var(--line-dark);padding:5px 10px;border-radius:999px;font-size:11px;font-weight:700;}
+.live-pill::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--line);animation:pulse 1.6s infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.4;transform:scale(1.3);}}
+.hero-event{background:var(--bg);border-radius:var(--radius);padding:20px;}
+.hero-event h4{font-size:22px;font-weight:900;margin-bottom:6px;}
+.hero-event-meta{font-size:13px;color:var(--text-sub);margin-bottom:18px;}
+.hero-event-row{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-radius:var(--radius-sm);background:var(--bg-card);margin-bottom:8px;}
+.hero-event-row.highlight{background:var(--line-soft);}
+.hero-event-label{font-size:11px;color:var(--text-sub);font-weight:500;}
+.hero-event-val{font-size:18px;font-weight:900;}
+.highlight .hero-event-val{color:var(--line-dark);}
+.hero-event-foot{display:flex;justify-content:space-between;align-items:center;margin-top:18px;}
+.hero-event-rate strong{display:block;font-weight:700;color:var(--text);font-size:13px;}
+.hero-event-rate span{font-size:11px;color:var(--text-mute);}
+.btn-mini{background:var(--line);color:#fff;padding:10px 18px;border-radius:999px;font-size:12px;font-weight:700;display:inline-flex;align-items:center;gap:6px;}
+.btn-mini::before{content:"";width:12px;height:12px;background:#fff;mask:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='black' d='M19 5H5a3 3 0 0 0-3 3v8a3 3 0 0 0 3 3h2v3l4-3h8a3 3 0 0 0 3-3V8a3 3 0 0 0-3-3z'/></svg>") center/contain no-repeat;}
+
+/* ─── Sections ─── */
+.section{padding:96px 0;}
+@media(max-width:768px){.section{padding:64px 0;}}
+.section-head{text-align:center;margin-bottom:56px;}
+.section-head h2{font-size:clamp(28px,4vw,42px);font-weight:900;line-height:1.3;letter-spacing:-0.01em;margin-bottom:14px;}
+.section-head p{color:var(--text-sub);font-size:15px;max-width:600px;margin:0 auto;}
+
+/* ─── Benefits ─── */
+.benefits{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+@media(max-width:768px){.benefits{grid-template-columns:1fr;}}
+.benefit{background:var(--bg-card);border-radius:var(--radius);padding:32px 28px;box-shadow:var(--shadow);transition:transform .2s,box-shadow .2s;}
+.benefit:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg);}
+.benefit-icon{width:48px;height:48px;border-radius:14px;background:var(--line-soft);display:flex;align-items:center;justify-content:center;margin-bottom:20px;}
+.benefit-icon svg{width:24px;height:24px;color:var(--line-dark);}
+.benefit h3{font-size:20px;font-weight:900;margin-bottom:10px;}
+.benefit p{color:var(--text-sub);font-size:14px;line-height:1.75;}
+
+/* ─── Category grid ─── */
+.categories{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+@media(max-width:900px){.categories{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:560px){.categories{grid-template-columns:1fr;}}
+.cat-card{background:var(--bg-card);border-radius:var(--radius);padding:24px;cursor:pointer;transition:transform .2s,box-shadow .2s;position:relative;}
+.cat-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg);}
+.cat-card-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px;}
+.cat-card h3{font-size:18px;font-weight:900;}
+.cat-arrow{width:32px;height:32px;border-radius:50%;background:var(--bg-soft);display:flex;align-items:center;justify-content:center;transition:background .2s,transform .2s;}
+.cat-card:hover .cat-arrow{background:var(--line);transform:rotate(-45deg);}
+.cat-card:hover .cat-arrow svg{color:#fff;}
+.cat-arrow svg{width:14px;height:14px;color:var(--text);transition:color .2s;}
+.cat-reward{color:var(--line-dark);font-weight:700;font-size:14px;margin-bottom:8px;}
+.cat-meta{font-size:13px;color:var(--text-sub);}
+.cat-meta div{margin-bottom:4px;}
+
+/* ─── Featured events ─── */
+.events-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:32px;flex-wrap:wrap;gap:16px;}
+.events-head h2{font-size:clamp(28px,4vw,42px);font-weight:900;line-height:1.2;}
+.events-head p{color:var(--text-sub);font-size:14px;margin-top:8px;max-width:520px;}
+.events-update{background:var(--line-soft);color:var(--line-dark);padding:6px 12px;border-radius:999px;font-size:12px;font-weight:700;display:inline-flex;align-items:center;gap:6px;}
+.events-update::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--line);}
+.events{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+@media(max-width:900px){.events{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:560px){.events{grid-template-columns:1fr;}}
+
+/* ★ EVENT CARD - 情報を薄めた版 ★ */
+.event-card{
+  background:var(--bg-card);border-radius:var(--radius);
+  padding:24px;display:flex;flex-direction:column;
+  position:relative;overflow:hidden;
+  transition:transform .2s,box-shadow .2s;
+}
+.event-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg);}
+.event-cat{display:inline-block;font-size:11px;font-weight:700;color:var(--text-sub);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:10px;}
+.event-card h3{font-size:18px;font-weight:900;margin-bottom:6px;line-height:1.4;}
+.event-loc{font-size:13px;color:var(--text-sub);margin-bottom:16px;}
+.event-block{background:var(--bg);border-radius:var(--radius-sm);padding:14px 16px;margin-bottom:8px;}
+.event-block-label{font-size:11px;color:var(--text-sub);margin-bottom:2px;}
+.event-block-val{font-size:18px;font-weight:900;}
+.event-block.reward{background:var(--line-soft);}
+.event-block.reward .event-block-val{color:var(--line-dark);}
+.event-card-cta{
+  margin-top:14px;padding:12px 16px;
+  background:var(--text);color:#fff;
+  border-radius:999px;
+  font-size:13px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;gap:6px;
+  transition:background .2s;
+}
+.event-card:hover .event-card-cta{background:var(--line);}
+.event-card-cta::before{content:"";width:14px;height:14px;background:#fff;mask:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='black' d='M19 5H5a3 3 0 0 0-3 3v8a3 3 0 0 0 3 3h2v3l4-3h8a3 3 0 0 0 3-3V8a3 3 0 0 0-3-3z'/></svg>") center/contain no-repeat;}
+
+/* ─── How it works ─── */
+.steps{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;}
+@media(max-width:900px){.steps{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:560px){.steps{grid-template-columns:1fr;}}
+.step{background:var(--bg-card);border-radius:var(--radius-sm);padding:18px;display:flex;align-items:center;gap:14px;}
+.step-num{width:32px;height:32px;border-radius:50%;background:var(--line-soft);color:var(--line-dark);font-size:13px;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'Inter',sans-serif;}
+.step-label{font-size:14px;font-weight:700;}
+
+/* ─── Trust ─── */
+.trust-wrap{background:var(--bg-dark);color:#fff;border-radius:var(--radius-lg);padding:64px 40px;}
+@media(max-width:768px){.trust-wrap{padding:48px 24px;}}
+.trust-wrap .section-head h2{color:#fff;}
+.trust-wrap .section-head p{color:rgba(255,255,255,0.6);}
+.trust-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;}
+@media(max-width:900px){.trust-grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:560px){.trust-grid{grid-template-columns:1fr;}}
+.trust-item{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:var(--radius-sm);padding:24px 18px;}
+.trust-icon{width:32px;height:32px;border-radius:9px;background:rgba(6,199,85,0.15);color:var(--line);display:flex;align-items:center;justify-content:center;margin-bottom:14px;}
+.trust-icon svg{width:18px;height:18px;}
+.trust-item p{font-size:14px;font-weight:600;line-height:1.5;}
+
+/* ─── Stats ─── */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:48px;}
+@media(max-width:768px){.stats{grid-template-columns:repeat(2,1fr);}}
+.stat{background:var(--bg-card);border-radius:var(--radius);padding:28px 24px;}
+.stat-val{font-size:36px;font-weight:900;letter-spacing:-0.02em;font-family:'Inter',sans-serif;}
+.stat-label{font-size:13px;color:var(--text-sub);margin-top:4px;}
+
+/* ─── Final CTA ─── */
+.final-cta{background:var(--bg-card);border-radius:var(--radius-lg);padding:80px 40px;text-align:center;}
+@media(max-width:768px){.final-cta{padding:56px 24px;}}
+.final-cta h2{font-size:clamp(32px,5vw,52px);font-weight:900;line-height:1.2;margin-bottom:16px;}
+.final-cta p{color:var(--text-sub);margin-bottom:32px;font-size:15px;}
+
+/* ─── Footer ─── */
+.footer{border-top:1px solid var(--border);padding:40px 0;margin-top:80px;text-align:center;color:var(--text-mute);font-size:13px;}
+
+/* ═══ Directory ═══ */
+.directory-hero{padding:56px 0 32px;}
+.breadcrumb{font-size:13px;color:var(--text-sub);margin-bottom:16px;display:flex;align-items:center;gap:8px;}
+.breadcrumb a{cursor:pointer;}
+.breadcrumb a:hover{color:var(--text);}
+.breadcrumb-sep{color:var(--text-mute);}
+.directory-hero h1{font-size:clamp(32px,5vw,52px);font-weight:900;letter-spacing:-0.02em;line-height:1.2;margin-bottom:12px;}
+.directory-hero p{color:var(--text-sub);font-size:15px;}
+.filters{display:flex;gap:8px;flex-wrap:wrap;padding:24px 0 32px;border-bottom:1px solid var(--border);margin-bottom:32px;overflow-x:auto;}
+.filter-chip{background:var(--bg-card);border:1px solid var(--border);padding:10px 18px;border-radius:999px;font-size:13px;font-weight:600;white-space:nowrap;transition:all .2s;}
+.filter-chip:hover{border-color:var(--text);}
+.filter-chip.active{background:var(--text);color:#fff;border-color:var(--text);}
+.directory-toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;flex-wrap:wrap;gap:12px;}
+.directory-count{font-size:14px;color:var(--text-sub);}
+.directory-count strong{color:var(--text);font-weight:700;}
+.directory-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;padding-bottom:80px;}
+@media(max-width:900px){.directory-grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:560px){.directory-grid{grid-template-columns:1fr;}}
+
+/* ═══ Category ═══ */
+.cat-hero{padding:56px 0 32px;}
+.cat-hero-grid{display:grid;grid-template-columns:1fr auto;gap:32px;align-items:end;margin-bottom:32px;}
+@media(max-width:768px){.cat-hero-grid{grid-template-columns:1fr;}}
+.cat-hero h1{font-size:clamp(32px,5vw,52px);font-weight:900;letter-spacing:-0.02em;line-height:1.2;margin-bottom:12px;}
+.cat-hero p{color:var(--text-sub);font-size:15px;max-width:600px;}
+.cat-summary{background:var(--bg-card);border-radius:var(--radius);padding:20px;display:flex;gap:24px;align-items:center;white-space:nowrap;}
+.cat-summary-label{font-size:11px;color:var(--text-sub);margin-bottom:2px;}
+.cat-summary-val{font-size:18px;font-weight:900;}
+.cat-summary-val.reward{color:var(--line-dark);}
+.cat-summary-divider{width:1px;height:32px;background:var(--border);}
+
+/* ═══ LOADING STATE ═══ */
+.loading{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:80px 20px;color:var(--text-mute);
+}
+.loading-spinner{
+  width:32px;height:32px;border:3px solid var(--border);
+  border-top-color:var(--line);border-radius:50%;
+  animation:spin 0.8s linear infinite;margin-bottom:16px;
+}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/* ═══ DATA SOURCE BADGE (右下) ═══ */
+.data-source{
+  position:fixed;bottom:16px;left:16px;
+  background:var(--bg-card);border:1px solid var(--border);
+  padding:8px 12px;border-radius:999px;
+  font-size:11px;color:var(--text-sub);
+  display:flex;align-items:center;gap:6px;
+  box-shadow:var(--shadow);z-index:50;
+}
+.data-source-dot{width:6px;height:6px;border-radius:50%;background:var(--line);}
+.data-source-dot.error{background:#E74C3C;}
+.data-source-dot.demo{background:#F59E0B;}
+@media(max-width:768px){.data-source{display:none;}}
+</style>
+</head>
+<body>
+
+<!-- ═══════════ NAVIGATION ═══════════ -->
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="logo" onclick="navigate('home')">
+      <div class="logo-mark">LINE</div>
+      <span>Campus Pay</span>
+    </div>
+    <div class="nav-menu">
+      <a onclick="navigate('directory')" id="nav-directory">案件を見る</a>
+      <a onclick="navigate('home');setTimeout(()=>scrollToId('how'),100)">使い方</a>
+      <a onclick="navigate('home');setTimeout(()=>scrollToId('trust'),100)">安心の理由</a>
+    </div>
+    <button class="nav-cta" onclick="openLine()">LINEで見る</button>
+  </div>
+</nav>
+
+<!-- ═══════════ HOME ═══════════ -->
+<main id="page-home" class="page active">
+  <section class="hero">
+    <div class="container">
+      <div class="hero-grid">
+        <div>
+          <div class="hero-badge">学生限定・LINEで完結</div>
+          <h1>空き時間を、<br>ちょっと価値ある時間に。</h1>
+          <p class="hero-sub">学生限定。説明会、交流会、キャリアイベントなどに参加して謝礼を受け取れる機会をLINEで配信中。</p>
+          <div class="hero-tags">
+            <span class="tag">学生限定</span>
+            <span class="tag">LINE完結</span>
+            <span class="tag">即日PayPay案件あり</span>
+            <span class="tag">謝礼あり</span>
+          </div>
+          <div class="hero-ctas">
+            <button class="btn btn-line" onclick="openLine()">LINEで案件を見る</button>
+            <button class="btn btn-ghost" onclick="navigate('directory')">募集中の案件を見る</button>
+          </div>
+        </div>
+        <div class="hero-card" id="hero-card-container"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:32px;">
+    <div class="container">
+      <div class="section-head">
+        <h2>お金・効率・安心感を、全部スマホで。</h2>
+        <p>就活イベントを探している学生だけでなく、空き時間を少し有効に使いたい学生にも届くように設計しています。</p>
+      </div>
+      <div class="benefits">
+        <div class="benefit">
+          <div class="benefit-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M9 9h4.5a2 2 0 1 1 0 4H10a2 2 0 1 0 0 4h5"/></svg></div>
+          <h3>謝礼あり</h3>
+          <p>参加条件を満たせば謝礼を受け取れる案件を掲載。事前に金額を確認できるので安心です。</p>
+        </div>
+        <div class="benefit">
+          <div class="benefit-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7v10l10 5 10-5V7L12 2z"/><path d="M2 7l10 5 10-5M12 12v10"/></svg></div>
+          <h3>キャリアにも役立つ</h3>
+          <p>企業説明会や交流会など、将来に役立つ情報も得られる。一度の参加で複数の価値を持ち帰れます。</p>
+        </div>
+        <div class="benefit">
+          <div class="benefit-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="2"/><path d="M11 18h2"/></svg></div>
+          <h3>LINE完結</h3>
+          <p>案件確認から申し込みまでスマホだけで完結。空き時間にすべての手続きが完了します。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <h2>興味があるものだけ、選べる。</h2>
+        <p>企業説明会から交流会まで、謝礼・所要時間・参加しやすさを見て判断できます。</p>
+      </div>
+      <div class="categories" id="home-categories"></div>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0;">
+    <div class="container">
+      <div class="events-head">
+        <div>
+          <h2>募集中の案件例</h2>
+          <p>謝礼・時間・場所を見て興味があれば、LINEで詳細を確認できます。</p>
+        </div>
+        <span class="events-update">毎週更新</span>
+      </div>
+      <div class="events" id="home-events"></div>
+      <div style="text-align:center;margin-top:40px;">
+        <button class="btn btn-line" onclick="openLine()">全ての案件を見るには、LINE登録から →</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="how" style="padding-top:0;">
+    <div class="container">
+      <div class="section-head">
+        <h2>参加まで、全部LINEで。</h2>
+        <p>検索よりも、通知で届く。気になった案件だけ詳細を見て、必要なら申し込みます。</p>
+      </div>
+      <div class="steps">
+        <div class="step"><div class="step-num">01</div><div class="step-label">LINE登録</div></div>
+        <div class="step"><div class="step-num">02</div><div class="step-label">興味のある案件を見る</div></div>
+        <div class="step"><div class="step-num">03</div><div class="step-label">参加申込</div></div>
+        <div class="step"><div class="step-num">04</div><div class="step-label">参加</div></div>
+        <div class="step"><div class="step-num">05</div><div class="step-label">PayPayなどで謝礼受取</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="trust" style="padding-top:0;">
+    <div class="container">
+      <div class="trust-wrap">
+        <div class="section-head">
+          <h2>怪しくない、無理しなくていい。</h2>
+          <p>学生が不安に感じやすい条件・勧誘・支払いまわりを、参加前に確認できる設計です。</p>
+        </div>
+        <div class="trust-grid">
+          <div class="trust-item"><div class="trust-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><p>案件ごとに条件を事前確認可能</p></div>
+          <div class="trust-item"><div class="trust-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 9-8 10-4.5-1-8-5-8-10V6l8-4z"/></svg></div><p>無理な勧誘なし</p></div>
+          <div class="trust-item"><div class="trust-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div><p>興味ある案件だけ参加可能</p></div>
+          <div class="trust-item"><div class="trust-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="2"/><path d="M11 18h2"/></svg></div><p>スマホだけで完結</p></div>
+          <div class="trust-item"><div class="trust-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><p>参加前に詳細確認可能</p></div>
+        </div>
+        <div class="stats" id="stats-container"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0;">
+    <div class="container">
+      <div class="final-cta">
+        <h2>まずは案件を見てみる。</h2>
+        <p>登録無料。興味のある案件だけ参加できます。</p>
+        <button class="btn btn-line" onclick="openLine()">LINEで案件を見る</button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ═══════════ DIRECTORY ═══════════ -->
+<main id="page-directory" class="page">
+  <section class="directory-hero">
+    <div class="container">
+      <div class="breadcrumb"><a onclick="navigate('home')">ホーム</a><span class="breadcrumb-sep">/</span><span>すべての案件</span></div>
+      <h1>募集中の案件</h1>
+      <p>謝礼・時間・場所を見比べて、興味があるものだけLINEで詳細を見られます。</p>
+      <div class="filters" id="directory-filters"></div>
+      <div class="directory-toolbar">
+        <div class="directory-count"><strong id="event-count">0</strong>件の案件</div>
+        <button class="btn btn-line" style="padding:10px 20px;font-size:13px;" onclick="openLine()">LINEで全案件を見る</button>
+      </div>
+      <div class="directory-grid" id="directory-grid"></div>
+    </div>
+  </section>
+</main>
+
+<!-- ═══════════ CATEGORY ═══════════ -->
+<main id="page-category" class="page">
+  <section class="cat-hero">
+    <div class="container">
+      <div class="breadcrumb"><a onclick="navigate('home')">ホーム</a><span class="breadcrumb-sep">/</span><a onclick="navigate('directory')">案件を見る</a><span class="breadcrumb-sep">/</span><span id="cat-breadcrumb">カテゴリ</span></div>
+      <div class="cat-hero-grid">
+        <div>
+          <h1 id="cat-title">企業説明会</h1>
+          <p id="cat-desc"></p>
+        </div>
+        <div class="cat-summary">
+          <div><div class="cat-summary-label">案件数</div><div class="cat-summary-val" id="cat-count">0件</div></div>
+          <div class="cat-summary-divider"></div>
+          <div><div class="cat-summary-label">謝礼相場</div><div class="cat-summary-val reward" id="cat-range">-</div></div>
+        </div>
+      </div>
+      <div class="directory-grid" id="category-grid"></div>
+      <div style="text-align:center;padding:40px 0 80px;">
+        <button class="btn btn-line" onclick="openLine()">このカテゴリの案件をLINEで詳しく見る</button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="container">© 2026 Campus Pay — 学生のための、ちょっと価値あるLINEプラットフォーム。</div>
+</footer>
+
+<!-- データソース表示 -->
+<div class="data-source" id="data-source">
+  <div class="data-source-dot demo" id="data-source-dot"></div>
+  <span id="data-source-label">DEMO データ表示中</span>
+</div>
+
+<script>
+/* ════════════════════════════════════════════════════════════
+   ★★★ 設定エリア ★★★
+   ════════════════════════════════════════════════════════════ */
+
+const CONFIG = {
+  // 公式LINEのURL(前田さんの実際のURLに差し替えてください)
+  LINE_URL: 'https://line.me/R/ti/p/@your_line_id',
+
+  // Google Sheets のWeb公開URL(GASでJSON返却するURL)
+  // 設定しない場合はDEMOデータを表示します
+  SHEETS_API_URL: '',  // 例: 'https://script.google.com/macros/s/AKfycby.../exec'
+};
+
+/* ════════════════════════════════════════════════════════════
+   DEMO データ(Sheets未接続時のフォールバック)
+   ════════════════════════════════════════════════════════════ */
+
+const DEMO_CATEGORIES = [
+  {id:'company',     name:'企業説明会',        desc:'企業の事業や働き方を直接聞ける場。', rewardRange:'2,000〜4,000円', time:'60〜120分', level:'かんたん'},
+  {id:'career',      name:'キャリアセミナー',    desc:'業界知識やスキルを学べるセミナー。', rewardRange:'2,000〜3,000円', time:'60〜90分',  level:'かんたん'},
+  {id:'networking',  name:'社会人交流会',        desc:'多様な業界の社会人と直接話せる場。', rewardRange:'3,000〜5,000円', time:'90〜120分', level:'ふつう'},
+  {id:'entrepreneur',name:'起業家交流会',        desc:'スタートアップ・起業家との交流。',   rewardRange:'3,000〜5,000円', time:'90〜120分', level:'ふつう'},
+  {id:'interview',   name:'面接対策イベント',    desc:'実践的な面接トレーニング。',         rewardRange:'2,000〜3,000円', time:'60分',      level:'かんたん'},
+  {id:'industry',    name:'業界研究イベント',    desc:'特定業界を深掘りする会。',           rewardRange:'2,000〜4,000円', time:'60〜120分', level:'かんたん'}
+];
+
+const DEMO_EVENTS = [
+  {id:'demo-1',title:'人材業界セミナー',cat:'company',loc:'渋谷 / オンライン',time:90,reward:3000,rate:2000,seats:6,published:true},
+  {id:'demo-2',title:'若手社会人交流会',cat:'networking',loc:'新宿',time:120,reward:4000,rate:2000,seats:4,published:true},
+  {id:'demo-3',title:'面接対策セミナー',cat:'interview',loc:'オンライン',time:60,reward:2000,rate:2000,seats:9,published:true},
+  {id:'demo-4',title:'スタートアップ起業家交流会',cat:'entrepreneur',loc:'六本木',time:120,reward:5000,rate:2500,seats:3,published:true},
+  {id:'demo-5',title:'コンサル業界セミナー',cat:'company',loc:'丸の内 / オンライン',time:90,reward:3500,rate:2333,seats:5,published:true},
+  {id:'demo-6',title:'フィンテック業界研究',cat:'industry',loc:'オンライン',time:90,reward:3000,rate:2000,seats:8,published:true}
+];
+
+const DEMO_STATS = {
+  students:'8,400+',     studentsLabel:'登録学生',
+  events:'620+',         eventsLabel:'開催・紹介実績',
+  satisfaction:'94%',    satisfactionLabel:'平均満足度',
+  repeat:'47%',          repeatLabel:'リピート参加率'
+};
+
+/* ════════════════════════════════════════════════════════════
+   STATE
+   ════════════════════════════════════════════════════════════ */
+
+let CATEGORIES = DEMO_CATEGORIES;
+let EVENTS = DEMO_EVENTS;
+let STATS = DEMO_STATS;
+let activeFilter = 'all';
+
+/* ════════════════════════════════════════════════════════════
+   DATA FETCH from Google Sheets via GAS
+   ════════════════════════════════════════════════════════════ */
+
+async function fetchSheetsData(){
+  if(!CONFIG.SHEETS_API_URL){
+    updateDataSource('demo', 'DEMOデータ表示中(未接続)');
+    return false;
+  }
+
+  try{
+    updateDataSource('loading', '読み込み中...');
+    const res = await fetch(CONFIG.SHEETS_API_URL);
+    if(!res.ok) throw new Error('HTTP '+res.status);
+    const data = await res.json();
+
+    // 各データをマージ(取得できたものだけ更新)
+    if(data.categories && Array.isArray(data.categories) && data.categories.length>0){
+      CATEGORIES = data.categories;
+    }
+    if(data.events && Array.isArray(data.events)){
+      // 公開フラグがONのみ表示
+      EVENTS = data.events.filter(e => e.published !== false && e.published !== 'false' && e.published !== 'FALSE');
+    }
+    if(data.stats){
+      STATS = {...STATS, ...data.stats};
+    }
+
+    updateDataSource('live', `LIVE・案件${EVENTS.length}件`);
+    return true;
+  }catch(err){
+    console.error('Sheets fetch error:', err);
+    updateDataSource('error', 'DEMO表示中(接続エラー)');
+    return false;
+  }
+}
+
+function updateDataSource(state, label){
+  const dot = document.getElementById('data-source-dot');
+  const lbl = document.getElementById('data-source-label');
+  dot.className = 'data-source-dot';
+  if(state==='error') dot.classList.add('error');
+  if(state==='demo') dot.classList.add('demo');
+  if(state==='loading') dot.classList.add('demo');
+  lbl.textContent = label;
+}
+
+/* ════════════════════════════════════════════════════════════
+   LINE URL OPENER
+   ════════════════════════════════════════════════════════════ */
+
+function openLine(){
+  window.open(CONFIG.LINE_URL, '_blank');
+}
+
+/* ════════════════════════════════════════════════════════════
+   RENDER
+   ════════════════════════════════════════════════════════════ */
+
+function renderHeroCard(){
+  const e = EVENTS[0];
+  if(!e){
+    document.getElementById('hero-card-container').innerHTML = `
+      <div style="text-align:center;padding:40px;color:var(--text-mute);">案件を読み込み中...</div>
+    `;
+    return;
+  }
+  document.getElementById('hero-card-container').innerHTML = `
+    <div class="hero-card-head">
+      <h3>本日のおすすめ</h3>
+      <span class="live-pill">LINE配信中</span>
+    </div>
+    <div class="hero-event">
+      <h4>${esc(e.title)}</h4>
+      <div class="hero-event-meta">${esc(e.loc)}</div>
+      <div class="hero-event-row">
+        <span class="hero-event-label">所要時間</span>
+        <span class="hero-event-val">${e.time}分</span>
+      </div>
+      <div class="hero-event-row highlight">
+        <span class="hero-event-label">受け取れる謝礼</span>
+        <span class="hero-event-val">謝礼${Number(e.reward).toLocaleString()}円</span>
+      </div>
+      <div class="hero-event-foot">
+        <div class="hero-event-rate">
+          <strong>時給換算${Number(e.rate).toLocaleString()}円</strong>
+        </div>
+        <button class="btn-mini" onclick="openLine()">LINEで見る</button>
+      </div>
+    </div>
+  `;
+}
+
+function renderStats(){
+  document.getElementById('stats-container').innerHTML = `
+    <div class="stat"><div class="stat-val">${esc(STATS.students)}</div><div class="stat-label">${esc(STATS.studentsLabel)}</div></div>
+    <div class="stat"><div class="stat-val">${esc(STATS.events)}</div><div class="stat-label">${esc(STATS.eventsLabel)}</div></div>
+    <div class="stat"><div class="stat-val">${esc(STATS.satisfaction)}</div><div class="stat-label">${esc(STATS.satisfactionLabel)}</div></div>
+    <div class="stat"><div class="stat-val">${esc(STATS.repeat)}</div><div class="stat-label">${esc(STATS.repeatLabel)}</div></div>
+  `;
+}
+
+function renderHomeCategories(){
+  document.getElementById('home-categories').innerHTML = CATEGORIES.map(c => `
+    <div class="cat-card" onclick="openCategory('${esc(c.id)}')">
+      <div class="cat-card-head">
+        <h3>${esc(c.name)}</h3>
+        <div class="cat-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></div>
+      </div>
+      <div class="cat-reward">謝礼 ${esc(c.rewardRange)}</div>
+      <div class="cat-meta">
+        <div>${esc(c.time)}</div>
+        <div>難易度:${esc(c.level)}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderHomeEvents(){
+  const top6 = EVENTS.slice(0,6);
+  document.getElementById('home-events').innerHTML = top6.length
+    ? top6.map(eventCard).join('')
+    : '<div style="grid-column:1/-1;padding:60px;text-align:center;color:var(--text-mute);">案件を読み込み中...</div>';
+}
+
+/* ★ 情報を薄めたEvent Card ★
+   表示するのは: カテゴリ・タイトル・場所・時間・謝礼・時給換算 のみ
+   詳細・日時・参加条件はLINE限定 */
+function eventCard(e){
+  const cat = CATEGORIES.find(c=>c.id===e.cat);
+  return `
+    <div class="event-card" onclick="openLine()">
+      <div class="event-cat">${cat?esc(cat.name):''}</div>
+      <h3>${esc(e.title)}</h3>
+      <div class="event-loc">${esc(e.loc)}</div>
+      <div class="event-block">
+        <div class="event-block-label">所要時間</div>
+        <div class="event-block-val">${e.time}分</div>
+      </div>
+      <div class="event-block reward">
+        <div class="event-block-label">受け取れる謝礼</div>
+        <div class="event-block-val">謝礼${Number(e.reward).toLocaleString()}円</div>
+      </div>
+      <div style="font-size:13px;font-weight:700;color:var(--text-sub);margin-top:8px;">時給換算 ${Number(e.rate).toLocaleString()}円</div>
+      <div class="event-card-cta">LINEで詳細を見る</div>
+    </div>
+  `;
+}
+
+function renderDirectoryFilters(){
+  const filters = [{id:'all',name:'すべて'}, ...CATEGORIES];
+  document.getElementById('directory-filters').innerHTML = filters.map(f =>
+    `<button class="filter-chip ${activeFilter===f.id?'active':''}" onclick="setFilter('${esc(f.id)}')">${esc(f.name)}</button>`
+  ).join('');
+}
+
+function setFilter(id){
+  activeFilter = id;
+  renderDirectoryFilters();
+  renderDirectory();
+}
+
+function renderDirectory(){
+  let list = [...EVENTS];
+  if(activeFilter !== 'all') list = list.filter(e => e.cat === activeFilter);
+
+  document.getElementById('event-count').textContent = list.length;
+  document.getElementById('directory-grid').innerHTML = list.length
+    ? list.map(eventCard).join('')
+    : '<div style="grid-column:1/-1;padding:60px;text-align:center;color:var(--text-mute);">該当する案件はまだありません。</div>';
+}
+
+function openCategory(catId){
+  const cat = CATEGORIES.find(c=>c.id===catId);
+  if(!cat) return;
+  const list = EVENTS.filter(e=>e.cat===catId);
+
+  document.getElementById('cat-title').textContent = cat.name;
+  document.getElementById('cat-desc').textContent = cat.desc;
+  document.getElementById('cat-breadcrumb').textContent = cat.name;
+  document.getElementById('cat-count').textContent = `${list.length}件`;
+  document.getElementById('cat-range').textContent = cat.rewardRange;
+  document.getElementById('category-grid').innerHTML = list.length
+    ? list.map(eventCard).join('')
+    : '<div style="grid-column:1/-1;padding:60px;text-align:center;color:var(--text-mute);">このカテゴリの案件はまだありません。</div>';
+
+  navigate('category');
+}
+
+function navigate(pageId){
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-'+pageId).classList.add('active');
+  window.scrollTo({top:0, behavior:'instant'});
+
+  document.querySelectorAll('.nav-menu a').forEach(a=>a.classList.remove('active'));
+  if(pageId==='directory' || pageId==='category'){
+    document.getElementById('nav-directory').classList.add('active');
+  }
+}
+
+function scrollToId(id){
+  const el = document.getElementById(id);
+  if(el) el.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));}
+
+function refreshAll(){
+  renderHeroCard();
+  renderStats();
+  renderHomeCategories();
+  renderHomeEvents();
+  renderDirectoryFilters();
+  renderDirectory();
+}
+
+/* ═══ INIT ═══ */
+async function init(){
+  refreshAll();  // まずDEMOで描画
+  const ok = await fetchSheetsData();  // Sheetsからデータ取得を試行
+  if(ok) refreshAll();  // 取得成功したら再描画
+
+  // 5分ごとに自動更新(タブ開きっぱなしでも最新)
+  if(CONFIG.SHEETS_API_URL){
+    setInterval(async ()=>{
+      const ok = await fetchSheetsData();
+      if(ok) refreshAll();
+    }, 5*60*1000);
+  }
+}
+init();
+</script>
+</body>
+</html>
