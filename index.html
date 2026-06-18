@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Campus Pay - 空き時間を、ちょっと価値ある時間に。</title>
+<title>就活incentive - 空き時間を、ちょっと価値ある時間に。</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -307,7 +307,7 @@ button{font-family:inherit;border:none;cursor:pointer;background:none;}
   <div class="nav-inner">
     <div class="logo" onclick="navigate('home')">
       <div class="logo-mark">LINE</div>
-      <span>Campus Pay</span>
+      <span>就活incentive</span>
     </div>
     <div class="nav-menu">
       <a onclick="navigate('directory')" id="nav-directory">案件を見る</a>
@@ -483,7 +483,7 @@ button{font-family:inherit;border:none;cursor:pointer;background:none;}
 </main>
  
 <footer class="footer">
-  <div class="container">© 2026 Campus Pay — 学生のための、ちょっと価値あるLINEプラットフォーム。</div>
+  <div class="container">© 2026 就活incentive — 学生のための、ちょっと価値あるLINEプラットフォーム。</div>
 </footer>
  
 <!-- データソース表示 -->
@@ -499,11 +499,11 @@ button{font-family:inherit;border:none;cursor:pointer;background:none;}
  
 const CONFIG = {
   // 公式LINEのURL
-  LINE_URL: 'https://lin.ee/XO1UWxX',
+  LINE_URL: 'https://lin.ee/5JRgIxV',
  
   // Google Sheets のWeb公開URL(GASでJSON返却するURL)
   // 設定しない場合はDEMOデータを表示します
-  SHEETS_API_URL: 'https://raw.githubusercontent.com/maeryo795/-/main/data.json',
+  SHEETS_API_URL: '',  // 例: 'https://script.google.com/macros/s/AKfycby.../exec'
 };
  
 /* ════════════════════════════════════════════════════════════
@@ -556,7 +556,7 @@ async function fetchSheetsData(){
  
   try{
     updateDataSource('loading', '読み込み中...');
-    const res = await fetch(CONFIG.SHEETS_API_URL);
+    const res = await fetch(CONFIG.SHEETS_API_URL, {redirect:'follow'});
     if(!res.ok) throw new Error('HTTP '+res.status);
     const data = await res.json();
  
