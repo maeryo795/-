@@ -824,7 +824,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
       </div>
       <div class="filter-group">
         <div class="filter-label">開催場所</div>
-        <select class="filter-select" id="filterLocation" onchange="filterAndRender()">
+        <select class="filter-select" id="filterLocation" onchange="onLocationChange(this.value)">
           <option value="">すべての場所</option>
           <option value="online">オンライン</option>
           <option value="offline">対面</option>
@@ -832,7 +832,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
       </div>
       <div class="filter-group">
         <div class="filter-label">謝礼金額</div>
-        <select class="filter-select" id="filterCashback" onchange="filterAndRender()">
+        <select class="filter-select" id="filterCashback" onchange="onCashbackChange(this.value)">
           <option value="">指定なし</option>
           <option value="1000">1,000円以上</option>
           <option value="3000">3,000円以上</option>
@@ -842,7 +842,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
       </div>
       <div class="filter-group">
         <div class="filter-label">支払い方法</div>
-        <select class="filter-select" id="filterPayment" onchange="filterAndRender()">
+        <select class="filter-select" id="filterPayment" onchange="onPaymentChange(this.value)">
           <option value="">すべて</option>
           <option value="PayPay">PayPay</option>
           <option value="Amazonギフト券">Amazonギフト券</option>
@@ -851,7 +851,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
       </div>
       <div class="filter-group">
         <div class="filter-label">並び順</div>
-        <select class="filter-select" id="sortOrder" onchange="filterAndRender()">
+        <select class="filter-select" id="sortOrder" onchange="onSortChange(this.value)">
           <option value="priority">おすすめ順</option>
           <option value="cashback">金額が高い順</option>
           <option value="new">新着順</option>
@@ -866,7 +866,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   <main class="main">
     <div class="results-bar">
       <div class="results-count"><strong id="resultCount">0</strong>件の案件</div>
-      <select class="sort-select" id="sortOrderMobile" onchange="filterAndRender()">
+      <select class="sort-select" id="sortOrderMobile" onchange="onSortChange(this.value)">
         <option value="priority">おすすめ順</option>
         <option value="cashback">金額が高い順</option>
         <option value="new">新着順</option>
@@ -920,7 +920,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
  
   <div class="filter-group">
     <div class="filter-label">並び順</div>
-    <select class="filter-select" id="sortOrderDrawer" onchange="filterAndRender()">
+    <select class="filter-select" id="sortOrderDrawer" onchange="onSortChange(this.value)">
       <option value="priority">おすすめ順</option>
       <option value="cashback">金額が高い順</option>
       <option value="new">新着順</option>
@@ -930,7 +930,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   </div>
   <div class="filter-group">
     <div class="filter-label">開催場所</div>
-    <select class="filter-select" id="filterLocationMobile" onchange="filterAndRender()">
+    <select class="filter-select" id="filterLocationMobile" onchange="onLocationChange(this.value)">
       <option value="">すべての場所</option>
       <option value="online">オンライン</option>
       <option value="offline">対面</option>
@@ -938,7 +938,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   </div>
   <div class="filter-group">
     <div class="filter-label">謝礼金額</div>
-    <select class="filter-select" id="filterCashbackMobile" onchange="filterAndRender()">
+    <select class="filter-select" id="filterCashbackMobile" onchange="onCashbackChange(this.value)">
       <option value="">指定なし</option>
       <option value="1000">1,000円以上</option>
       <option value="3000">3,000円以上</option>
@@ -948,7 +948,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   </div>
   <div class="filter-group">
     <div class="filter-label">支払い方法</div>
-    <select class="filter-select" id="filterPaymentMobile" onchange="filterAndRender()">
+    <select class="filter-select" id="filterPaymentMobile" onchange="onPaymentChange(this.value)">
       <option value="">すべて</option>
       <option value="PayPay">PayPay</option>
       <option value="Amazonギフト券">Amazonギフト券</option>
@@ -1014,7 +1014,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
    GASのURLをここに貼り付けるだけで、
    スプレッドシートと連動します。
 ═══════════════════════════════════════════════════ */
-const EVENTS_API_URL = 'https://script.google.com/macros/s/AKfycby3A2Zchp-FQe-TlLH7s8_gyJzaTDgDqUzyXYg_X9bTzo0UyaVvLhtDXAwRPW4WOuilsg/exec'; // ← GASのデプロイURLをここに貼り付け
+const EVENTS_API_URL = ''; // ← GASのデプロイURLをここに貼り付け
  
 /* ═══════════════════════════════════════════════════
    ★★★ DEMOデータ(GAS未接続時に表示) ★★★
@@ -1217,30 +1217,60 @@ function setCategory(cat, btn) {
    フィルター値の取得（PC・モバイル同期）
 ═══════════════════════════════ */
 function getFilterValues() {
-  const isMobile = window.innerWidth < 768;
+  // すべてのセレクトを同期させ、最後に変更した値を取得
+  // PC・スマホどちらで操作しても正しく動作する
  
-  // ソート
-  const sortPC = document.getElementById('sortOrder').value;
-  const sortMobile = document.getElementById('sortOrderMobile').value;
-  const sortDrawer = document.getElementById('sortOrderDrawer').value;
-  const sort = isMobile ? sortDrawer : sortPC;
+  // ソート：3つのセレクトのうち、最後に変更されたものを使う
+  const sort = window._lastSort || 'priority';
  
   // 場所
-  const locPC = document.getElementById('filterLocation').value;
-  const locMobile = document.getElementById('filterLocationMobile').value;
-  const location = isMobile ? locMobile : locPC;
+  const location = window._lastLocation || '';
  
   // 謝礼
-  const cbPC = document.getElementById('filterCashback').value;
-  const cbMobile = document.getElementById('filterCashbackMobile').value;
-  const cashback = isMobile ? cbMobile : cbPC;
+  const cashback = window._lastCashback || '';
  
   // 支払い
-  const pmPC = document.getElementById('filterPayment').value;
-  const pmMobile = document.getElementById('filterPaymentMobile').value;
-  const payment = isMobile ? pmMobile : pmPC;
+  const payment = window._lastPayment || '';
  
   return { sort, location, cashback, payment };
+}
+ 
+// 各セレクトの変更を追跡する関数
+function onSortChange(val) {
+  window._lastSort = val;
+  // 全セレクトを同期
+  ['sortOrder','sortOrderMobile','sortOrderDrawer'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = val;
+  });
+  filterAndRender();
+}
+ 
+function onLocationChange(val) {
+  window._lastLocation = val;
+  ['filterLocation','filterLocationMobile'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = val;
+  });
+  filterAndRender();
+}
+ 
+function onCashbackChange(val) {
+  window._lastCashback = val;
+  ['filterCashback','filterCashbackMobile'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = val;
+  });
+  filterAndRender();
+}
+ 
+function onPaymentChange(val) {
+  window._lastPayment = val;
+  ['filterPayment','filterPaymentMobile'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = val;
+  });
+  filterAndRender();
 }
  
 /* ═══════════════════════════════
@@ -1387,9 +1417,19 @@ function clearFilter(key) {
 }
  
 function clearAllFilters() {
+  window._lastSort = 'priority';
+  window._lastLocation = '';
+  window._lastCashback = '';
+  window._lastPayment = '';
   ['filterLocation','filterLocationMobile','filterCashback','filterCashbackMobile',
-   'filterPayment','filterPaymentMobile'].forEach(id => { document.getElementById(id).value = ''; });
-  ['sortOrder','sortOrderMobile','sortOrderDrawer'].forEach(id => { document.getElementById(id).value = 'priority'; });
+   'filterPayment','filterPaymentMobile'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+  ['sortOrder','sortOrderMobile','sortOrderDrawer'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = 'priority';
+  });
   document.getElementById('searchInput').value = '';
   currentCategory = 'すべて';
   document.querySelectorAll('.tab-btn').forEach((b, i) => b.classList.toggle('active', i === 0));
